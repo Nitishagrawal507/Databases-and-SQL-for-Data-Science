@@ -1,0 +1,52 @@
+Problem 1 -
+Question - Find the total number of crimes recorded in the CRIME table.
+Answer - %sql select count(*) from CHICAGO_CRIME_DATA
+
+Problem 2 - 
+Question - Retrieve first 10 rows from the CRIME table.
+Answer - %sql select * from CHICAGO_CRIME_DATA
+
+Problem 3 - 
+Question - How many crimes involve an arrest.
+Answer - 
+%sql select count(*) from CHICAGO_CRIME_DATA\
+where ARREST = TRUE;
+
+Problem 4 -  
+Question - Which unique types of crimes have been recorded at a GAS STATION?
+Answer - %sql select distinct PRIMARY_TYPE from CHICAGO_CRIME_DATA\
+where LOCATION_DESCRIPTION = 'GAS STATION'
+
+Problem 5 - 
+Question - In the CENUS_DATA table list all community areas whose names start with the letter ‘B’.
+Answer - %sql select COMMUNITY_AREA_NAME from CENSUS_DATA\
+where COMMUNITY_AREA_NAME like 'B%'
+
+Problem 6 - 
+Question - List the schools in Community Areas 10 to 15 that are healthy school certified?
+Answer - 
+%sql select NAME_OF_SCHOOL from \
+(select NAME_OF_SCHOOL, HEALTHY_SCHOOL_CERTIFIED, COMMUNITY_AREA_NUMBER from CHICAGO_PUBLIC_SCHOOLS\
+where COMMUNITY_AREA_NUMBER between 10 and 15) as COMMUNITY_10_15\
+where HEALTHY_SCHOOL_CERTIFIED = 'Yes';
+
+Problem 7 - 
+Question - What is the average school Safety Score?
+Answer - %sql select avg(SAFETY_SCORE) from CHICAGO_PUBLIC_SCHOOLS;
+
+Problem 8 - 
+Question - List the top 5 Community Areas by average College Enrollments [number of students]
+Answer - %sql select COMMUNITY_AREA_NAME, avg(COLLEGE_ENROLLMENT) as number_of_students from CHICAGO_PUBLIC_SCHOOLS\
+group by COMMUNITY_AREA_NAME order by number_of_students desc fetch first 5 rows only;
+
+Problem 9 - 
+Question - Use a sub-query to determine which Community Area has the least value for Safety Score?
+Answer - %sql select COMMUNITY_AREA_NAME from CENSUS_DATA CD\
+where COMMUNITY_AREA_NUMBER = \
+(select COMMUNITY_AREA_NUMBER from CHICAGO_PUBLIC_SCHOOLS order by SAFETY_SCORE limit 1);
+
+Problem 10 - 
+Question - Find the Per Capita Income of the Community Area which has a school Safety Score of 1.
+Answer - 
+%sql select A.PER_CAPITA_INCOME from CENSUS_DATA A, CHICAGO_PUBLIC_SCHOOLS B \
+where A.COMMUNITY_AREA_NUMBER = B.COMMUNITY_AREA_NUMBER and B.SAFETY_SCORE = 1;
